@@ -1,5 +1,6 @@
 package com.example.myretrofitandcorrutinas.entities
 
+//datos complementarios
 data class Forecast(val dt: Long,
                     val temp: Double,
                     val humidity: Int,
