@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() , OnClickListener {
 
     private fun setupData() {
         lifecycleScope.launch {
-            mainViewModel.getWeatherAndForecast(19.4342, -99.1962,
+            mainViewModel.getWeatherAndForecast(25.294741, 51.535293,
                 "09ed2cfc331705f6fd102606ed441669", "metric", "en")
         }
     }
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() , OnClickListener {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val service = retrofit.create(WeatherForecastService::class.java)
-        service.getWeatherForecastByCoordinates(19.4342, -99.1962, "09ed2cfc331705f6fd102606ed441669",
+        service.getWeatherForecastByCoordinates(25.294741, 51.535293, "09ed2cfc331705f6fd102606ed441669",
             "metric", "en")
     }
 
