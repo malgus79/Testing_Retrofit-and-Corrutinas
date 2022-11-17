@@ -55,4 +55,17 @@ class MainViewModelTest {
             assertThat(result.timezone, `is`("Asia/Qatar"))
         }
     }
+
+    //test: provocar error esperado
+    @Test
+    fun checkErrorResponseWithOnlyCoordinatesTes(){
+        runBlocking {
+            try {
+                service.getWeatherForecastByCoordinates(25.294741, 51.535293,
+                    "", "", "")
+            } catch (e: Exception) {
+                assertThat(e.localizedMessage, `is`("HTTP 401 Unauthorized"))
+            }
+        }
+    }
 }
