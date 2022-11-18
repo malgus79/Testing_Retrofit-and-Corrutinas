@@ -51,4 +51,17 @@ class ResponseServerTest {
         //validar que tenga la propiedad "timezone"
         assertThat(response.getBody()?.readUtf8(), containsString("\"timezone\""))
     }
+
+    //test: procesar el error
+    @Test
+    fun `get weatherForecast and check fail response`(){
+        val response = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(JSONFileLoader().loadJSONString("weather_forecast_response_fail")
+                ?: "{errorCode:34}")
+        mockWebServer.enqueue(response)
+
+        assertThat(response.getBody()?.readUtf8(), containsString("{\"cod\":401, \"message\":" +
+                " \"Invalid API key. Please see http://openweathermap.org/faq#error401 for more info.\"}"))
+    }
 }
