@@ -37,4 +37,18 @@ class ResponseServerTest {
         //comprobar cualqueir dato del json (ej: timezone)
         assertThat(reader, containsString("Asia/Qatar"))
     }
+
+    //utilizando Mock Web Server
+    //test: procesar el json tal cual viene del servidor pero de manera local
+    @Test
+    fun `get weatherForecast and check timezone exist`(){
+        val response = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(JSONFileLoader().loadJSONString("weather_forecast_response_success")
+                ?: "{errorCode:34}")
+        mockWebServer.enqueue(response)
+
+        //validar que tenga la propiedad "timezone"
+        assertThat(response.getBody()?.readUtf8(), containsString("\"timezone\""))
+    }
 }
