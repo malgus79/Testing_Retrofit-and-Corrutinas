@@ -3,6 +3,7 @@ package com.example.myretrofitandcorrutinas.mainModule.viewModel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.myretrofitandcorrutinas.MainCoroutineRule
 import com.example.myretrofitandcorrutinas.common.dataAccess.WeatherForecastService
+import com.example.myretrofitandcorrutinas.dataAccess.JSONFileLoader
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
@@ -97,6 +98,22 @@ class MainViewModelTest {
             )
             val result = mainViewModel.getResult().getOrAwaitValue()
             assertThat(result.hourly.size, `is`(48))
+        }
+    }
+
+    //test: comparar la repsuesta local y remota
+    @Test
+    fun checkHourlySizeRemoteWithLocalTest(){
+        runBlocking {
+            val remoteResult = service.getWeatherForecastByCoordinates(25.294741, 51.535293,
+                "09ed2cfc331705f6fd102606ed441669", "metric", "en")
+
+            val localResult = JSONFileLoader().loadWeatherForecastEntity("weather_forecast_response_success")
+
+            //array del mismo tamaño
+            assertThat(localResult?.hourly?.size, `is`(remoteResult.hourly.size))
+            //comprobar la propiedad "timezone" de ambos
+            assertThat(localResult?.timezone, `is`(remoteResult.timezone))
         }
     }
 }
