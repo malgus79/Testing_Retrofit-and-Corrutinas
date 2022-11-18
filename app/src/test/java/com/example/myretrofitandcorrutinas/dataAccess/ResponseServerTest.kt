@@ -64,4 +64,20 @@ class ResponseServerTest {
         assertThat(response.getBody()?.readUtf8(), containsString("{\"cod\":401, \"message\":" +
                 " \"Invalid API key. Please see http://openweathermap.org/faq#error401 for more info.\"}"))
     }
+
+    //test: trabajar con el formato de los objetos de kotlin y no con el string de Json
+    @Test
+    fun `get weatherForecast and check contains hourly list no empty`(){
+        val response = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(JSONFileLoader().loadJSONString("weather_forecast_response_success")
+                ?: "{errorCode:34}")
+        mockWebServer.enqueue(response)
+        //verificar que contenga la propiedad "hourly"
+        assertThat(response.getBody()?.readUtf8(), containsString("hourly"))
+
+        val json = Gson().fromJson(response.getBody()?.readUtf8() ?: "", WeatherForecastEntity::class.java)
+        //comprobar que el array de pronostico por hora no sea null
+        assertThat(json.hourly.isEmpty(), `is`(false))
+    }
 }
